@@ -1,11 +1,3 @@
-const DODGER = document.getElementById('dodger');
-const GAME = document.getElementById('game');
-const GAME_HEIGHT = 400;
-const GAME_WIDTH = 400;
-const LEFT_ARROW = 37;
-const RIGHT_ARROW = 39;
-const ROCKS = [];
-const START = document.getElementById('start');
 var ball_diameter = 20;
 var bomb_diameter = 10;
 var xpoint;
@@ -22,7 +14,7 @@ var score = 0;
 var posX;
 
 
-function setup(rock) {
+function setup() {
     createCanvas(640, 480);
 
     var temp00 = 0, temp01 = -20;
