@@ -1,5 +1,7 @@
 html {
-    background-color: #111;
+    background-blend-mode: hard-light;
+    background-color: #252A34
+
 }
 h1 { text-align: center;
     font-stretch: extra-expanded;
@@ -9,81 +11,88 @@ h1 { text-align: center;
 
 }
 #dodger {
-    background-color: #FF2E63;
+    
+    background-color:limegreen;
     height: 20px;
     position: absolute;
-    width: 80px;
+    width: 59px;
 }   
   
   
   #game {
     background-color: #252A34;
-    height: 600px;
+    height: 500px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
     text-align: center;
-    width: 600px;
+    width: 400px;
     -webkit-box-shadow: 4px -4px 15px 0px #FF1F1F, 12px -11px 7px 0px #FF9376, 20px -5px 7px 0px #FFE264, 20px 6px 7px 0px #F6FF33, 13px 12px 17px 0px #FF9527, 2px 17px 17px 0px #FF0000, -9px 21px 18px 0px #FFF212, -9px 6px 11px 0px #FF0808, -11px -9px 11px 0px #FFFA17, -11px -9px 11px 0px #FFFA17, 5px 5px 15px 5px rgba(0,0,0,0); 
     box-shadow: 4px -4px 15px 0px #FF1F1F, 12px -11px 7px 0px #FF9376, 20px -5px 7px 0px #FFE264, 20px 6px 7px 0px #F6FF33, 13px 12px 17px 0px #FF9527, 2px 17px 17px 0px #FF0000, -9px 21px 18px 0px #FFF212, -9px 6px 11px 0px #FF0808, -11px -9px 11px 0px #FFFA17, -11px -9px 11px 0px #FFFA17, 5px 5px 15px 5px rgba(0,0,0,0);
 }
   
   #start {
-    color: #08D9D6;
+    color:yellowgreen;
     font-size: 4rem;
     position: relative;
     text-decoration: none;
     top: 4rem;
 }
   
-  .bomb {
+  .rock {
     width: 20px;
     height: 20px;
-    background: tan;
+    background: red;
     position: absolute;
 }
   
-  .bomb:before {
+  .rock:before {
     content: "";
-    border-bottom: 6px solid tan;
+    border-bottom: 6px solid yellow;
     border-left: 6px solid #111;
     border-right: 6px solid #111;
     height: 0;
     left: 0;
     position: absolute;
     top: 0;
-    width: 9px;
+    width: 20px;
   }
   
-  .bomb:after {
+  .rock:after {
     content: "";
     border-left: 6px solid #111;
     border-right: 6px solid #111;
-    border-top: 6px solid tan;
+    border-top: 6px solid orange;
     bottom: 0;
     height: 0;
     left: 0;
     position: absolute;
-    width: 9px;
+    width: 20px;
   }
   
-    button{
-      display : inline;
-      height:20px; 
-      width:100px; 
-      margin: 40px 300px; 
-      position:center;
-      top:50%; 
-      left:50%;
+  button{
+    display : inline;
+    height:20px; 
+    width:100px; 
+    margin: 40px 300px; 
+    position:center;
+    top:50%; 
+    cursor: pointer;
+   }
+
+
+button.left{
   
-  }
+}
+button.right{
+  
+}
   .score {
       font: 1em sans-serif;
+      font: white;
 
   }
   
 
-   .xpoint {
-       font:purple;
 
-  }
+  

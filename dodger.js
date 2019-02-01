@@ -1,112 +1,145 @@
-var ball_diameter = 20;
-var bomb_diameter = 10;
-var xpoint;
-var ypoint;
-var zapperwidth = 6;
-var numofbombs = 20;
-var bombposX = [];
-var bombposY = [];
-var bombacceleration = [];
-var bombvelocity = [];
-var time = 0;
-var timeperiod = 0;
-var score = 0;
-var posX;
+
+const DODGER = document.getElementById('dodger');
+const GAME = document.getElementById('game');
+const GAME_HEIGHT = 400;
+const GAME_WIDTH = 400;
+const LEFT_ARROW = 37; 
+const RIGHT_ARROW = 39; 
+const ROCKS = [];
+const START = document.getElementById('start');
+var winAniRock=null;
+var gameInterval = null;
 
 
-function setup() {
-    createCanvas(640, 480);
 
-    var temp00 = 0, temp01 = -20;
-    while (temp01 < height) {
-        temp00 += 0.02;
-        temp01 += temp00;
-        timeperiod++;
-    }
-    posX = zapperwidth + 0.5 * ball_diameter - 2;
-    xpoint = 0.5 * width;
-    ypoint = height - 0.5 * ball_diameter + 1;
+function checkCollision(rock) {
 
-    intibombpos();
-}
-function draw() {
-    background(0);
+  const top = positionToInteger(rock.style.top);
 
-    fill(239, 58, 38);
-    rect(0, 0, zapperwidth, height);
-
-    scoreUpdate();
-
-    ellipse(xpoint, ypoint, ball_diameter, ball_diameter);
-    xpoint -= 3;
-
-    for (var i = 0; i < numofbombs; i++) {
-        ellipse(bombposX[i], bombposX[i], bomb_diameter);
+  if (top > 360) {
+    const  dodgerLeftEdge = positionToInteger(DODGER.style.left);
+    const dodgerRightEdge = dodgerLeftEdge+40;
+    const rockLeftEdge = positionToInteger(rock.style.left);
+    const rockRightEdge = rockLeftEdge+40;
+    return (rockLeftEdge<=dodgerLeftEdge&&rockRightEdge>=dodgerLeftEdge) || (rockLeftEdge>=dodgerLeftEdge&&rockRightEdge<=dodgerRightEdge) || (rockLeftEdge<=dodgerRightEdge&&rockRightEdge>=dodgerRightEdge);
+  } else {
+    return false;
     }
 
-    updatebombpos();
+  }
 
-    if (mouseIsPressed && (xpoint + 0.5 * ball_diameter) < width) {
-        xpoint += 4;
+
+function createRock(x) {
+  const rock = document.createElement('div');
+
+  rock.className = 'rock';
+  rock.style.left = `${x}px`;
+
+  let top = 0;
+
+
+  rock.style.top = top;
+
+
+    GAME.appendChild(rock);
+     moveRock();
+
+
+  function moveRock() {
+
+   rock.style.top= `${top+=2}px`;
+
+     var check = window.checkCollision(rock);
+     if(check===true){
+       window.endGame();
+
+     }
+
+     if(top<375){
+       const winAniRock = window.requestAnimationFrame(moveRock);
+     }
+
+    if(top == GAME_HEIGHT-24){
+    rock.remove();
     }
+  }
 
-    if (xpoint < posX || bombCollisionTest) {
-        gameover();
-    }
+  ROCKS.push(rock);
 
-    time++;
-
-
-}
-
-function intibombpos() {
-    for (var i = 0; i < numofbombs; i++) {
-        bombacceleration[i] = random(0.02, 0.03);
-        bombvelocity[i] = random(0, 5);
-        bombposX[i] = random(zapperwidth + (0.5 * ball_diameter), width);
-        bombposY[i] = random(-20, 0.5 * ball_diameter);
-    }
-}
-
-function updatebombpos() {
-
-    for (var i = 0; i < numofbombs; i++) {
-        bombvelocity += bombacceleration[i];
-        bombposY[i] += bombvelocity[i];
-    }
-
-    if (time > timeperiod) {
-        intibombpos();
-        time = 0;
-    }
-
+  return rock;
 }
 
-function bombCollisionTest() {
-    var temp = 0.5 * (ball_diameter * bomb_diameter) - 2;
-    var distance;
+function endGame() {
 
-    for (var i = 0; i < numofbombs; i++) {
-        distance = dist(xpoint, ypoint, bombposX[i], bombposY[i]);
-        if (distance < temp) {
-            return true;
-        }
-    }
-    return false
 
-}
-function gameover() {
-    fill(255)
-    text("GAME OVER", 0.5 * width, 0.5 * height);
-    noloop();
+clearInterval(gameInterval)
+
+  ROCKS.forEach(function(rock) { rock.remove() })
+
+  document.removeEventListener('keydown', moveDodger)
+
+  START.innerHTML = 'Try again?'
+  START.style.display = 'inline'
+
+ 
 }
 
-
-function scoreUpdate() {
-    score += 10;
-    fill(255);
-    text("SCORE:" + int(score / timeperiod), width - 65, 15);
+function moveDodger(e) {
 
 
+   if(e.which===LEFT_ARROW){
+     e.preventDefault();
+     e.stopPropagation();
+      moveDodgerLeft();
+   }
+   if(e.which===RIGHT_ARROW){
+     e.preventDefault();
+     e.stopPropagation();
+      moveDodgerRight();
+   }
 
+}
+
+
+function moveDodgerLeft() {
+
+
+dodgerLeftEdge=positionToInteger(DODGER.style.left);
+   let left = dodgerLeftEdge;
+ window.requestAnimationFrame(function(){
+   if(dodgerLeftEdge>0){
+     DODGER.style.left= `${left-=4}px`;
+   
+   }
+ });
+   
+}
+
+function moveDodgerRight() {
+dodgerLeftEdge=positionToInteger(DODGER.style.left);
+dodgerRightEdge=dodgerLeftEdge+40;
+   let right = dodgerLeftEdge+40;
+   let left = dodgerLeftEdge;
+   window.requestAnimationFrame(function(){
+     if(dodgerRightEdge<400){
+     DODGER.style.right=`${right-=4}px`
+     DODGER.style.left=`${left+=4}px`;
+     }
+   });
+   
+}
+
+
+function positionToInteger(p) {
+  return parseInt(p.split('px')[0]) || 0
+}
+
+function start() {
+  window.addEventListener('keydown', moveDodger)
+
+  START.style.display = 'none'
+
+  gameInterval = setInterval(function() {
+    createRock(Math.floor(Math.random() *  (GAME_WIDTH - 20)))
+  }, 1000)
 }
